@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Coin Fever: To Andromeda</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-stage="orbit">
+<canvas id="fx"></canvas>
+<div id="golden-layer"></div>
+
+<header id="topbar">
+  <div class="brand"><span class="brand-coin">🚀</span> COIN FEVER <span class="tagline">to Andromeda</span></div>
+  <div class="stat-block">
+    <div id="coins" class="coins">0</div>
+    <div class="sub"><span id="cps">0</span>/sec &nbsp;·&nbsp; <span id="cpc">1</span>/click</div>
+  </div>
+  <div class="top-actions">
+    <button id="daily-btn" class="pill gift hidden">🎁 Daily Gift</button>
+    <button id="prestige-btn" class="pill" title="Dock at a station: trade everything for permanent Warp Cores">💎 <span id="diamonds">0</span> <span id="pending-diamonds" class="pending hidden"></span></button>
+    <button id="share-btn" class="icon-btn" title="Share your progress">📸</button>
+    <button id="mute-btn" class="icon-btn" title="Toggle sound">🔊</button>
+  </div>
+</header>
+
+<main>
+  <section id="clicker">
+    <canvas id="stars"></canvas>
+    <div id="fever-flash"></div>
+    <div id="dest"><div id="dest-body">🌕</div><div id="dest-name">The Moon</div></div>
+    <div id="origin"><div id="origin-body">🌍</div></div>
+    <div id="arena"></div>
+    <div id="event-card" class="hidden">
+      <div class="ev-head"><span id="ev-icon">📡</span> <b id="ev-title"></b></div>
+      <div id="ev-text" class="ev-text"></div>
+      <div class="ev-actions"><button id="ev-a"></button><button id="ev-b" class="secondary"></button></div>
+      <div class="ev-timer"><i id="ev-timer-fill"></i></div>
+    </div>
+
+    <div id="buffs"></div>
+    <div id="combo-wrap" class="hidden">
+      <div id="combo-label">COMBO ×1.00</div>
+      <div class="combo-track"><div id="combo-bar"></div></div>
+    </div>
+    <div id="fever-wrap">
+      <div class="fever-track"><div id="fever-bar"></div></div>
+      <div id="fever-label">FEVER</div>
+    </div>
+    <div id="throttle-wrap" class="hidden">
+      <div class="throttle-track"><div id="throttle-bar"></div></div>
+      <div id="throttle-label">AUTOPILOT ×1.0 · click to burn</div>
+    </div>
+
+    <div id="coin-stage">
+      <div id="coin-glow"></div>
+      <div id="coin" title="Click to thrust!">
+        <svg id="ship" viewBox="0 0 120 230" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="hull" x1="0" x2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="0.45" stop-color="#dcdcea"/><stop offset="1" stop-color="#8f8fa8"/></linearGradient>
+            <radialGradient id="glass" cx="0.35" cy="0.35"><stop offset="0" stop-color="#d9fbff"/><stop offset="0.6" stop-color="#3bb0e6"/><stop offset="1" stop-color="#0d3f6e"/></radialGradient>
+            <linearGradient id="flameG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fffbe0"/><stop offset="0.35" stop-color="#ffc21a"/><stop offset="1" stop-color="#ff3d00" stop-opacity="0"/></linearGradient>
+          </defs>
+          <g transform="translate(60,166)"><g class="flame">
+            <path class="flame-outer" d="M-20,0 Q0,95 20,0 Z" fill="url(#flameG)"/>
+            <path class="flame-inner" d="M-9,0 Q0,55 9,0 Z" fill="#ffffff" opacity="0.9"/>
+          </g></g>
+          <path d="M34,140 L8,190 L34,176 Z" fill="#ff4d6d" stroke="#a8203d" stroke-width="2"/>
+          <path d="M86,140 L112,190 L86,176 Z" fill="#ff4d6d" stroke="#a8203d" stroke-width="2"/>
+          <path d="M60,6 C92,44 94,116 84,166 L36,166 C26,116 28,44 60,6 Z" fill="url(#hull)" stroke="#5a5a75" stroke-width="2.5"/>
+          <path d="M60,6 C76,26 84,56 86,88 L34,88 C36,56 44,26 60,6 Z" fill="#ff4d6d" opacity="0.95"/>
+          <circle cx="60" cy="104" r="17" fill="url(#glass)" stroke="#f0f0f8" stroke-width="4"/>
+          <circle cx="54" cy="98" r="4" fill="#ffffff" opacity="0.8"/>
+          <rect x="40" y="154" width="40" height="14" rx="4" fill="#3d3d55"/>
+          <text x="60" y="146" text-anchor="middle" font-size="22" font-weight="900" fill="#ffcc33" font-family="Georgia, serif" stroke="#7a5200" stroke-width="0.8">$</text>
+        </svg>
+        <div id="sweet-spot">⭐</div>
+      </div>
+    </div>
+
+    <div id="journey">
+      <div id="j-flight">
+        <div class="j-row">
+          <span id="j-from" class="j-end">🌍</span>
+          <div class="j-track"><div id="j-fill"></div><div id="j-ship">🚀</div></div>
+          <span id="j-to" class="j-end">🌕</span>
+        </div>
+        <div class="j-info"><b id="j-dest">The Moon</b> <span id="j-dist"></span> · <span id="j-speed"></span> · <span id="j-eta"></span></div>
+      </div>
+      <div id="j-docked" class="hidden">
+        <div class="j-dock-title">DOCKED AT <b id="j-here">Earth</b></div>
+        <div class="j-fuel-row"><span>Fuel for <b id="j-next">the Moon</b></span><span id="j-fuel"></span></div>
+        <div class="goal-bar"><div id="j-fuel-fill"></div></div>
+        <button id="launch-btn">🚀 LAUNCH</button>
+      </div>
+    </div>
+
+    <div id="next-goal">
+      <div class="goal-row"><span class="goal-lbl">NEXT</span> <span id="goal-name">Solar Panel</span> <span id="goal-time"></span></div>
+      <div class="goal-bar"><div id="goal-fill"></div></div>
+    </div>
+  </section>
+
+  <section id="shop">
+    <nav id="tabs">
+      <button data-tab="buildings" class="active">🏗️ Build <span id="bld-badge" class="badge hidden"></span></button>
+      <button data-tab="upgrades">⚡ Upgrades <span id="upg-badge" class="badge hidden"></span></button>
+      <button data-tab="slots" id="slots-tab">🔒 Lucky Spin</button>
+      <button data-tab="journey">🗺️ Journey</button>
+      <button data-tab="achievements">🏆 Trophies</button>
+    </nav>
+
+    <div id="tab-buildings" class="tab active">
+      <div class="buy-amount">Buy
+        <button data-amt="1" class="active">×1</button>
+        <button data-amt="10">×10</button>
+        <button data-amt="100">×100</button>
+      </div>
+      <div id="buildings"></div>
+    </div>
+
+    <div id="tab-upgrades" class="tab">
+      <div id="upgrades"></div>
+      <p id="upg-empty" class="hint">No upgrades right now. Keep clicking and building — new ones unlock constantly.</p>
+    </div>
+
+    <div id="tab-slots" class="tab">
+      <div class="slot-machine">
+        <div class="slot-title">🎰 LUCKY SPIN 🎰</div>
+        <div class="slot-lights"></div>
+        <div class="reels">
+          <div class="reel" id="reel0"><span>🍒</span></div>
+          <div class="reel" id="reel1"><span>🍋</span></div>
+          <div class="reel" id="reel2"><span>🔔</span></div>
+        </div>
+        <div id="slot-result" class="slot-result">Feeling lucky?</div>
+        <button id="spin-btn" class="spin-btn">SPIN · <span id="spin-cost">0</span></button>
+        <div class="slot-sub">Bet = 20 seconds of income</div>
+        <table class="paytable">
+          <tr><td>7️⃣ 7️⃣ 7️⃣</td><td>×100 JACKPOT</td></tr>
+          <tr><td>💎 💎 💎</td><td>×30</td></tr>
+          <tr><td>💰 💰 💰</td><td>×12</td></tr>
+          <tr><td>🔔 🔔 🔔</td><td>×6</td></tr>
+          <tr><td>🍋 🍋 🍋</td><td>×4</td></tr>
+          <tr><td>🍒 🍒 🍒</td><td>×3</td></tr>
+          <tr><td>Any pair</td><td>×1.5</td></tr>
+        </table>
+      </div>
+      <div id="slot-locked" class="locked-panel">
+        <div class="lock-big">🔒</div>
+        <div>The Orbital Casino opens once you've earned <b>5,000</b> coins in total.</div>
+        <div class="goal-bar small"><div id="slot-unlock-fill"></div></div>
+      </div>
+    </div>
+
+    <div id="tab-journey" class="tab">
+      <div id="journey-summary" class="ach-summary"></div>
+      <div id="journey-list"></div>
+    </div>
+
+    <div id="tab-achievements" class="tab">
+      <div id="ach-summary" class="ach-summary"></div>
+      <div id="achievements"></div>
+      <h3 class="section-h">Stats</h3>
+      <div id="stats" class="stats"></div>
+      <div class="danger-zone">
+        <button id="reset-btn" class="danger">Hard reset (wipe everything)</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div id="arrival" class="hidden">
+  <div class="arr-icon" id="arr-icon">🌕</div>
+  <div class="arr-label">ARRIVED</div>
+  <div class="arr-name" id="arr-name">The Moon</div>
+  <div class="arr-story" id="arr-story"></div>
+  <div class="arr-bonus" id="arr-bonus"></div>
+</div>
+
+<div id="ending" class="hidden">
+  <div class="end-box">
+    <div class="end-kicker">YOU MADE IT</div>
+    <h1>ANDROMEDA</h1>
+    <p class="end-sub">2.4 million light-years. One click at a time.</p>
+    <div id="end-stats" class="end-stats"></div>
+    <div class="end-credits">
+      <p>Thanks for flying Coin Fever.</p>
+      <p class="dim">Every planet you passed, every asteroid you mined, every pirate you caught. Nobody made you do it. You just wanted to see what was next.</p>
+    </div>
+    <div class="modal-actions">
+      <button id="end-continue" class="secondary">Keep flying</button>
+      <button id="end-ngplus">🌀 New Game+ (warp ×3 forever)</button>
+    </div>
+  </div>
+</div>
+
+<div id="perk-modal" class="hidden">
+  <div class="perk-box">
+    <div class="end-kicker">PLANETARY RELIC</div>
+    <h2 id="perk-title">Choose your reward</h2>
+    <p class="dim" id="perk-sub">Permanent. Pick wisely.</p>
+    <div id="perk-cards"></div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<div id="modal" class="hidden">
+  <div class="modal-box">
+    <h2 id="modal-title"></h2>
+    <div id="modal-body"></div>
+    <div class="modal-actions">
+      <button id="modal-secondary" class="secondary hidden"></button>
+      <button id="modal-ok">Awesome!</button>
+    </div>
+  </div>
+</div>
+
+<div id="tooltip" class="hidden"></div>
+<canvas id="share-canvas" width="1200" height="630" class="hidden"></canvas>
+
+<script src="game.js"></script>
+</body>
+</html>
